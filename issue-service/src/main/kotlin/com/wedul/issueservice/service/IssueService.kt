@@ -4,6 +4,7 @@ import IssueRequest
 import IssueResponse
 import com.wedul.issueservice.domain.issue.Issue
 import com.wedul.issueservice.domain.issue.IssueRepository
+import com.wedul.issueservice.domain.issue.IssueStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -24,4 +25,8 @@ class IssueService(
         )
         return IssueResponse(issueRepository.save(issue))
     }
+
+    @Transactional(readOnly = true)
+    fun getAll(status: IssueStatus) = issueRepository.findAllByStatusOrderByCreatedAtDesc(status)
+        ?.map { IssueResponse(it) }
 }
